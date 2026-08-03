@@ -54,32 +54,20 @@ export function useAuth() {
   }, [authService]);
 
   const signIn = async (email: string, password: string): Promise<User> => {
-    try {
-      const firebaseUser = await authService.signInWithEmail(email, password);
-      setUser(firebaseUser);
-      return firebaseUser;
-    } catch (error) {
-      throw error;
-    }
+    const firebaseUser = await authService.signInWithEmail(email, password);
+    setUser(firebaseUser);
+    return firebaseUser;
   };
 
   const signUp = async (email: string, password: string): Promise<User> => {
-    try {
-      const firebaseUser = await authService.createUserWithEmail(email, password);
-      setUser(firebaseUser);
-      return firebaseUser;
-    } catch (error) {
-      throw error;
-    }
+    const firebaseUser = await authService.createUserWithEmail(email, password);
+    setUser(firebaseUser);
+    return firebaseUser;
   };
 
   const signOut = async (): Promise<void> => {
-    try {
-      await authService.signOut();
-      setUser(null);
-    } catch (error) {
-      throw error;
-    }
+    await authService.signOut();
+    setUser(null);
   };
 
   const initialize = async (): Promise<void> => {
