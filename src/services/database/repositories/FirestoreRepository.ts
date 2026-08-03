@@ -25,7 +25,7 @@ export class FirestoreRepository<T> {
    */
   public async getById(id: string): Promise<T | null> {
     try {
-      const docRef = this.firestoreService.document<T>(this.collectionName);
+      const docRef = this.firestoreService.document<T>(`${this.collectionName}/${id}`);
       const doc = await docRef.get();
       return doc ? doc : null;
     } catch (error) {
@@ -62,8 +62,7 @@ export class FirestoreRepository<T> {
   public async create(data: T): Promise<string> {
     try {
       const collectionRef = this.firestoreService.collection<T>(this.collectionName);
-      const docRef = await collectionRef.add(data);
-      return docRef.id;
+      return await collectionRef.add(data);
     } catch (error) {
       throw new FrameworkError(`Failed to create document in ${this.collectionName}`, {
         data,
