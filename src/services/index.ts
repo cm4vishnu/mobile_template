@@ -10,3 +10,4 @@ export { GeminiService, geminiService } from './ai/gemini';
 export { CameraService, cameraService } from './camera';
 export { FileSystemService, fileSystemService } from './filesystem';
 export { NetworkService, networkService } from './network';
+export { PushNotificationService, pushNotificationService } from './push';
