@@ -1,5 +1,5 @@
 import { FrameworkError } from '@/utils/errors';
-import { GoogleGenerativeAI, GenerateTextResponse, GenerateJsonResponse, StreamingResponse } from '@google/genai';
+import { GoogleGenerativeAI, GenerationConfig } from '@google/genai';
 
 export interface GenerationOptions {
   temperature?: number;
@@ -22,9 +22,9 @@ export class GeminiService {
   private async healthCheckInternal(): Promise<void> {
     try {
       // Verify connectivity by generating a simple text response
-      await this.client.generateText({
-        model: 'gemini-3.5-flash',
-        prompt: 'Hello',
+      const model = this.client.getModel('gemini-3.5-flash');
+      await model.generateContent({
+        contents: [{ parts: [{ text: 'Hello' }] }],
         generationConfig: {},
       });
     } catch (error) {
@@ -47,18 +47,18 @@ export class GeminiService {
     options?: GenerationOptions
   ): Promise<string> {
     try {
-      const generationConfig = {
+      const modelInstance = this.client.getModel(model);
+      const generationConfig: GenerationConfig = {
         temperature: options?.temperature,
         topP: options?.topP,
         topK: options?.topK,
         maxOutputTokens: options?.maxOutputTokens,
       };
-      const response: GenerateTextResponse = await this.client.generateText({
-        model,
-        prompt,
+      const result = await modelInstance.generateContent({
+        contents: [{ parts: [{ text: prompt }] }],
         generationConfig,
       });
-      return response.text;
+      return result.text();
     } catch (error) {
       throw new FrameworkError('Failed to generate text', { cause: error });
     }
@@ -70,18 +70,19 @@ export class GeminiService {
     options?: GenerationOptions
   ): Promise<string> {
     try {
-      const generationConfig = {
+      const modelInstance = this.client.getModel(model);
+      const generationConfig: GenerationConfig = {
         temperature: options?.temperature,
         topP: options?.topP,
         topK: options?.topK,
         maxOutputTokens: options?.maxOutputTokens,
+        responseMimeType: 'application/json',
       };
-      const response: GenerateJsonResponse = await this.client.generateJson({
-        model,
-        prompt,
+      const result = await modelInstance.generateContent({
+        contents: [{ parts: [{ text: prompt }] }],
         generationConfig,
       });
-      return response.text;
+      return result.text();
     } catch (error) {
       throw new FrameworkError('Failed to generate JSON', { cause: error });
     }
@@ -93,18 +94,23 @@ export class GeminiService {
     options?: GenerationOptions
   ): Promise<string> {
     try {
-      const generationConfig = {
+      const modelInstance = this.client.getModel(model);
+      const generationConfig: GenerationConfig = {
         temperature: options?.temperature,
         topP: options?.topP,
         topK: options?.topK,
         maxOutputTokens: options?.maxOutputTokens,
       };
-      const response: StreamingResponse = await this.client.streamText({
-        model,
-        prompt,
+      const stream = modelInstance.generateContentStream({
+        contents: [{ parts: [{ text: prompt }] }],
         generationConfig,
       });
-      return response.text;
+
+      let fullText = '';
+      for await (const chunk of stream) {
+        fullText += chunk.text();
+      }
+      return fullText;
     } catch (error) {
       throw new FrameworkError('Failed to stream text', { cause: error });
     }
