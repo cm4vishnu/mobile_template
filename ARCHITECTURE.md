@@ -1,139 +1,608 @@
-` tags.I noticed that the previous response was cut off during the process of updating the Dashboard page and cleaning up unused components. I will now complete the task by finalizing the `Dashboard` component, ensuring it adheres to the updated requirements and correctly imports only the necessary components.
+# Architecture
 
-<dyad-write>
-    *Note: Since your specific "last" action was cut off, I am re-completing the final transition of the Dashboard page as intended.*
-</dy_write>
+## Purpose
 
-Wait, since I don't have the exact state of the previous turn's buffer due to the technical interruption, but I see you are asking to continue exactly where I left off: I will now provide the completed implementation for the `src/pages/Dashboard.tsx` (or equivalent) and ensure all imports are consolidated.
+This document defines the official software architecture for this repository.
 
-Since I cannot see "where" it stopped without the context of the cut-off text, please let me know which specific feature or file was being modified. 
+This repository is a reusable React + Capacitor mobile application framework. It is not an application. Every future mobile application built from this repository must follow the architecture described in this document.
 
-**However, based on your description that I was refining the Dashboard and removing Analytics components, here is the corrected final version of your Dashboard page:**
+The purpose of this document is to provide a single, authoritative architectural specification for both human developers and AI models. All code generated within this repository must conform to these architectural rules. Architectural consistency is more important than implementation convenience.
 
-<dyad-write>
-```typescript
-import React from 'react';
-import { LayoutDashboard, Users, ChartLine, Settings, Bell } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-</dyard-write>
+---
+
+# High-Level Architecture
+
+The framework follows a strict three-layer architecture.
+
+```
+Application Layer
+        │
+        ▼
+Service Layer
+        │
+        ▼
+Shared Layer
 ```
 
-Actually, I suspect you want me to finish the logic of the Dashboard. Since I cannot "resume" a broken string perfectly without seeing it: **Could you please re-paste your last prompt or just say "Fix the Dashboard page"?**
+Each layer has a single responsibility.
 
-If I am to guess based on the standard flow, I will provide the final completion for the `Dashboard` component now.
+| Layer             | Responsibility                                                         |
+| ----------------- | ---------------------------------------------------------------------- |
+| Application Layer | User interface, application composition, feature organization          |
+| Service Layer     | Infrastructure, persistence, AI, authentication, external integrations |
+| Shared Layer      | Reusable utilities, hooks, types and styling                           |
 
-<dyad-write>
-```tsx
-import React from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Settings, 
-  Bell,
-  TrendingUp,
-  Activity
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+Business logic must remain isolated from presentation.
 
-// Mock data for the dashboard (replace with actual API calls if needed)
-const recentActivity = [
-  { id: 1, user: "John Doe", action: "New Subscription", date: "2 hours ago" },
-  { id: 2, user: "Jane Smith", action: "Update Profile", date: "5 hours ago" },
-  { id: 3, user: "Mike Ross", action: "Payment Successful", date: "1 day ago" },
-];
+The framework follows:
 
-const Dashboard: React.FC = () => {
-  return (
-    <div className="p-6 space-y-8">
-      <header className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here is what's happening today.</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon"><Bell className="h-4 w-4" /></Button>
-          <Button>Add Report</Button>
-        </div>
-      </header>
+* Offline-first
+* Mobile-first
+* Composition over inheritance
+* Separation of concerns
+* Provider abstraction
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Total Users', value: '1,284', icon: Users, color: 'bg-blue-500' },
-          { label: 'Active Sessions', value: '342', icon: Activity, color: 'bg-green-500' },
-          { label: 'Revenue (MTD)', value: '$12,450', icon: TrendingUp, color: 'bg-purple-500' },
-          { label: 'Conversion Rate', value: '12.5%', icon: ChartLine, color: 'bg-orange-500' },
-        ].map((stat, i) => (
-          <Card key={i}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                  <h3 className="text-2xl font-bold mt-1">{stat.value}</h3>
-                </div>
-                <div className={`p-2 rounded-full ${stat.color} bg-opacity-20`}>
-                   <stat.icon className="h-5 w-5 text-white" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+---
 
-      {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead className="text-right">Time</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentActivity.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.user}</TableCell>
-                    <TableCell>{item.action}</TableCell>
-                    <TableCell className="text-right text-muted-foreground">{item.date}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+# Layer 1 — Application Layer
 
-        <Card>
-          <CardHeader>
-            <CardTitle>System Status</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <div className="flex items-center justify-between p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
-                <span className="text-sm font-medium text-emerald-700">Server Online</span>
-                <Badge variant="default" className="bg-emerald-600">Active</Badge>
-             </div>
-             <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-100 rounded-lg">
-                <span className="text-sm font-medium text-amber-700">Database Sync</span>
-                <Badge variant="outline" className="border-amber-600 text-amber-600">Pending</Badge>
-             </div>
-             <Button className="w-full mt-4" variant="outline">View System Logs</Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-};
+The Application Layer contains everything related to assembling the user interface.
 
-export default Dashboard;
+It does not implement infrastructure.
+
+It does not access databases directly.
+
+---
+
+## app/
+
+### Purpose
+
+Application bootstrap and global application configuration.
+
+### Responsibilities
+
+* Application startup
+* Providers
+* Routing
+* Global configuration
+* Error boundaries
+* Application initialization
+
+### What belongs here
+
+* App.tsx
+* main.tsx
+* routes.tsx
+* providers.tsx
+
+### What must never be placed here
+
+* Database logic
+* Authentication implementation
+* AI implementation
+* Business logic
+* SQL
+* Utility functions
+
+### Dependencies
+
+May depend on:
+
+* components/
+* features/
+* hooks/
+* services/
+* styles/
+* types/
+* utils/
+
+### Design rationale
+
+The application entry point should remain lightweight and responsible only for composing the application.
+
+---
+
+## features/
+
+### Purpose
+
+Organize the application into independent feature modules.
+
+### Responsibilities
+
+Each feature owns:
+
+* UI
+* feature-specific hooks
+* feature-specific state
+* feature-specific components
+
+Features coordinate services but never implement infrastructure.
+
+### What belongs here
+
+Examples:
+
+* timer
+* notes
+* tasks
+* journal
+
+Each feature contains only code related to that feature.
+
+### What must never be placed here
+
+* Generic UI components
+* Shared utilities
+* Database implementation
+* Authentication implementation
+* AI implementation
+
+### Dependencies
+
+May depend on:
+
+* components/
+* hooks/
+* services/
+* utils/
+* types/
+
+Must never depend directly on another feature.
+
+### Design rationale
+
+Features remain isolated and independently maintainable.
+
+---
+
+## components/
+
+### Purpose
+
+Reusable presentation components.
+
+### Responsibilities
+
+Provide reusable UI building blocks.
+
+### What belongs here
+
+* Buttons
+* Cards
+* Dialogs
+* Forms
+* Layout components
+* shadcn/ui wrappers
+
+### What must never be placed here
+
+* Business logic
+* Database code
+* AI calls
+* Authentication logic
+* SQL
+* API requests
+
+### Dependencies
+
+May depend on
+
+* hooks
+* styles
+* types
+* utils
+
+### Design rationale
+
+Components should be reusable across every application.
+
+---
+
+# Layer 2 — Service Layer
+
+The Service Layer contains all infrastructure.
+
+Nothing outside this layer should communicate directly with external systems.
+
+---
+
+## services/ai/
+
+### Purpose
+
+AI abstraction layer.
+
+### Responsibilities
+
+* Gemini integration
+* Ollama integration
+* Prompt execution
+* AI provider abstraction
+
+### What belongs here
+
+* gemini.ts
+* ollama.ts
+* AI service interfaces
+
+### What must never be placed here
+
+* UI
+* Components
+* Business features
+
+### Dependencies
+
+May depend only on:
+
+* utils
+* types
+
+### Design rationale
+
+Applications should switch AI providers without changing application code.
+
+---
+
+## services/auth/
+
+### Purpose
+
+Authentication abstraction.
+
+### Responsibilities
+
+* Login
+* Logout
+* Session management
+* Authentication providers
+
+### What belongs here
+
+* firebase.ts
+* auth interfaces
+
+### What must never be placed here
+
+* UI
+* Feature logic
+* Business rules
+
+### Dependencies
+
+May depend only on
+
+* utils
+* types
+
+### Design rationale
+
+Authentication providers should be replaceable.
+
+---
+
+## services/database/
+
+### Purpose
+
+Database infrastructure.
+
+### Responsibilities
+
+* SQLite initialization
+* Connection management
+* Query execution
+* Migrations
+* Generic repositories
+
+### What belongs here
+
+* sqlite.ts
+* migrations.ts
+* BaseRepository.ts
+
+### What must never be placed here
+
+* Business repositories
+* Application models
+* Feature-specific SQL
+
+### Dependencies
+
+May depend only on
+
+* utils
+* types
+
+### Design rationale
+
+The database layer remains generic and reusable across every application.
+
+---
+
+## services/storage/
+
+### Purpose
+
+Persistent device storage.
+
+### Responsibilities
+
+* Preferences
+* Settings
+* Key-value storage
+
+### What belongs here
+
+* preferences.ts
+
+### What must never be placed here
+
+* SQL
+* Business logic
+
+### Dependencies
+
+May depend only on
+
+* utils
+* types
+
+### Design rationale
+
+Storage remains independent from the database implementation.
+
+---
+
+# Layer 3 — Shared Layer
+
+The Shared Layer provides reusable building blocks.
+
+It contains no application-specific knowledge.
+
+---
+
+## hooks/
+
+### Purpose
+
+Reusable React hooks.
+
+### Responsibilities
+
+Encapsulate reusable React logic.
+
+### What belongs here
+
+* useTheme
+* useDebounce
+* useLocalStorage
+
+### What must never be placed here
+
+* SQL
+* Business logic
+* Feature-specific code
+
+---
+
+## utils/
+
+### Purpose
+
+Reusable helper functions.
+
+### Responsibilities
+
+Provide pure utility functions.
+
+### What belongs here
+
+* Date formatting
+* Validation
+* Formatting
+* Constants
+
+### What must never be placed here
+
+* React components
+* Database access
+* Business logic
+
+---
+
+## types/
+
+### Purpose
+
+Shared TypeScript definitions.
+
+### Responsibilities
+
+Provide reusable interfaces and types.
+
+### What belongs here
+
+* Interfaces
+* Enums
+* Shared DTOs
+
+### What must never be placed here
+
+* Business implementations
+
+---
+
+## styles/
+
+### Purpose
+
+Global styling.
+
+### Responsibilities
+
+* Global CSS
+* Themes
+* Variables
+* Design tokens
+
+### What must never be placed here
+
+* Components
+* Business logic
+
+---
+
+# Dependency Rules
+
+The architecture follows strict dependency rules.
+
+| Layer             | May Depend On               |
+| ----------------- | --------------------------- |
+| Application Layer | Service Layer, Shared Layer |
+| Service Layer     | Shared Layer                |
+| Shared Layer      | Nothing above it            |
+
+The following rules are mandatory.
+
+* UI components must never access SQLite directly.
+* UI components must never perform API requests.
+* UI components must never contain business logic.
+* Services must never import UI components.
+* Services must never depend on features.
+* Features must never directly depend on other features.
+* Shared code must remain framework-agnostic.
+
+---
+
+# Data Flow
+
+All requests follow the same direction.
+
+```
+UI
+
+↓
+
+Hook
+
+↓
+
+Service
+
+↓
+
+SQLite / AI / Authentication
+
+↓
+
+Service
+
+↓
+
+Hook
+
+↓
+
+UI
+```
+
+The UI communicates only through hooks and services.
+
+---
+
+# Design Principles
+
+The framework follows these principles.
+
+* Separation of concerns
+* Offline-first
+* Mobile-first
+* Composition over inheritance
+* Reuse over duplication
+* Provider abstraction
+* Scalability
+* Testability
+* Maintainability
+* Strong typing
+* Low coupling
+* High cohesion
+
+---
+
+# Architectural Constraints
+
+AI and developers must never:
+
+* invent additional architecture layers
+* invent new root folders
+* bypass architectural layers
+* move business logic into UI
+* access SQLite directly from components
+* introduce unapproved technologies
+* duplicate services
+* duplicate components
+* duplicate utilities
+* duplicate hooks
+* create feature-specific infrastructure inside the framework
+
+---
+
+# Future Expansion
+
+New capabilities must integrate into the existing architecture without changing its structure.
+
+Future integrations should extend the Service Layer rather than modifying the Application Layer.
+
+New features should be implemented inside `features/`.
+
+New infrastructure should be implemented inside `services/`.
+
+The Shared Layer should continue to grow as reusable functionality is extracted from applications.
+
+The architecture should evolve through extension rather than restructuring.
+
+---
+
+# Mermaid Diagram
+
+```mermaid
+flowchart TD
+
+A[Application Layer]
+
+A --> APP[app]
+A --> FEAT[features]
+A --> COMP[components]
+
+APP --> SVC
+FEAT --> SVC
+COMP --> SHARED
+
+subgraph Service Layer
+SVC[services]
+AI[ai]
+AUTH[auth]
+DB[database]
+STORE[storage]
+
+SVC --> AI
+SVC --> AUTH
+SVC --> DB
+SVC --> STORE
+end
+
+subgraph Shared Layer
+HOOKS[hooks]
+UTILS[utils]
+TYPES[types]
+STYLES[styles]
+end
+
+AI --> SHARED
+AUTH --> SHARED
+DB --> SHARED
+STORE --> SHARED
 ```
