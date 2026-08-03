@@ -40,4 +40,4 @@ export function AppRouter({ children }: { children?: React.ReactNode }) {
       </Routes>
     </>
   );
-]
+}
