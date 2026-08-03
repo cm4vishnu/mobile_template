@@ -75,7 +75,7 @@ export class FirestoreRepository<T> {
   /**
    * Updates an existing document.
    * @param id - The document ID
-   * @param data - The data to update
+   * @param data - The data to update (partial)
    */
   public async update(id: string, data: Partial<T>): Promise<void> {
     try {
