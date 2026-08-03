@@ -29,3 +29,9 @@ dist-ssr
 /playwright/.cache/
 .last-run.json
 .dyad/
+
+# Local environment variables
+.env.local
+
+# Local overrides
+.env*.local
