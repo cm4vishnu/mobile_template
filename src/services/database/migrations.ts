@@ -1,4 +1,5 @@
-import { SQLiteService } from './sqlite';
+import { MigrationRunner } from './MigrationRunner';
+import { Migration } from './migrations';
 import { FrameworkError } from '@/utils/errors';
 
 /**
