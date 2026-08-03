@@ -1,11 +1,11 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
 import { LoadingRoute } from "./LoadingRoute";
 import { NotFoundRoute } from "./NotFoundRoute";
-import { routeRegistry } from "./RouteRegistry";
+import { routeRegistry, RouteConfig } from "./RouteRegistry";
 
 export function AppRouter({ children }: { children?: React.ReactNode }) {
   const { loading, initialized } = useAuth();
@@ -18,7 +18,7 @@ export function AppRouter({ children }: { children?: React.ReactNode }) {
     <>
       {children}
       <Routes>
-        {routeRegistry.map((route) => (
+        {routeRegistry.map((route: RouteConfig) => (
           <Route
             key={route.path}
             path={route.path}
@@ -40,3 +40,5 @@ export function AppRouter({ children }: { children?: React.ReactNode }) {
     </>
   );
 }
+</parameter>
+</function>

@@ -2,7 +2,7 @@ import React from "react";
 
 export interface RouteConfig {
   path: string;
-  Component: React.ComponentType<any>;
+  Component: React.ComponentType<Record<string, unknown>>;
   protected: boolean;
 }
 
@@ -23,3 +23,5 @@ export const routeRegistry: RouteConfig[] = [
     protected: true,
   },
 ];
+</parameter>
+</function>
