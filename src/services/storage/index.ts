@@ -1,1 +1,1 @@
-// Placeholder
+export { PreferencesService, FRAMEWORK_STORAGE_KEYS } from './preferences';
