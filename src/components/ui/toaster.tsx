@@ -1,40 +1,42 @@
-import { useToast } from "@/hooks/use-toast";
+"use client"
+
 import {
   Toast,
-  ToastClose,
-  ToastDescription,
+  type ToastProps,
+  ToastViewport,
   ToastProvider,
   ToastTitle,
-  ToastViewport,
-} from "@/components/ui/toast";
+  ToastAction,
+  ToastDescription,
+} from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 export function Toaster() {
-  const { toasts } = useToast();
+  const { toasts } = useToast()
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {toasts.map(function ({
+        id,
+        title,
+        description,
+        action,
+        ...props
+      }: ToastProps) {
         return (
           <Toast key={id} {...props}>
-I need to stop the previous loop and complete the audit properly. Let me start fresh with the actual cleanup work.
-
-First, let me remove the demo/template code files:
-<dyad-delete path="src/components/TimeLogger.tsx"></dyad-delete>
-<dyad-delete path="src/pages/Index.tsx"></dyad-delete>
-<dyad-delete path="src/pages/NotFound.tsx"></dyad-delete>
-<dyad-delete path="src/components/made-with-dyad.tsx"></dyad-delete>
-<dyad-delete path="src/App.css"></dyad-delete>
-
-Now let me clean up App.tsx to be a minimal framework template:
-<dyad-write path="src/App.tsx">
-import React from 'react';
-
-const App: React.FC = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
-      <h1 className="text-2xl font-bold">Framework Template</h1>
-    </div>
-  );
-};
-
-export default App;
+            <div className="grid gap-2">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && (
+                <ToastDescription>{description}</ToastDescription>
+              )}
+              {action}
+            </div>
+            {action && <ToastAction altText="Undo">{action}</ToastAction>}
+          </Toast>
+        )
+      })}
+      <ToastViewport />
+    </ToastProvider>
+  )
+}
