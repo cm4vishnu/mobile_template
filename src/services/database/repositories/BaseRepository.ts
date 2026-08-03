@@ -8,7 +8,7 @@ import { FrameworkError } from '@/utils/errors';
  * @template T - The entity type.
  * @template K - The type of the primary key.
  */
-export abstract class BaseRepository<T extends Record<string, any>, K = string | number> {
+export abstract class BaseRepository<T extends Record<string, unknown>, K = string | number> {
   protected readonly db = SQLiteService.getInstance();
   protected abstract readonly tableName: string;
   protected abstract readonly primaryKey: keyof T;
@@ -27,7 +27,7 @@ export abstract class BaseRepository<T extends Record<string, any>, K = string |
   public async findById(id: K): Promise<T | null> {
     const sql = `SELECT * FROM ${this.tableName} WHERE ${this.primaryKey} =?`;
     const results = await this.db.query<T>(sql, [id]);
-    return results.length > 0? results[0] : null;
+    return results.length > 0 ? results[0] : null;
   }
 
   /**
@@ -86,7 +86,7 @@ export abstract class BaseRepository<T extends Record<string, any>, K = string |
    */
   public async exists(id: K): Promise<boolean> {
     const sql = `SELECT 1 FROM ${this.tableName} WHERE ${this.primaryKey} =? LIMIT 1`;
-    const results = await this.db.query<any>(sql, [id]);
+    const results = await this.db.query<unknown>(sql, [id]);
     return results.length > 0;
   }
 
