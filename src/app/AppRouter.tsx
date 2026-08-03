@@ -1,3 +1,4 @@
+// File contents before modification (excluding the invalid lines)
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -39,6 +40,4 @@ export function AppRouter({ children }: { children?: React.ReactNode }) {
       </Routes>
     </>
   );
-}
-</parameter>
-</function>
+]

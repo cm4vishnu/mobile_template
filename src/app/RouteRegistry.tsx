@@ -1,5 +1,4 @@
-import React from "react";
-
+// File contents before modification (excluding the invalid lines)
 export interface RouteConfig {
   path: string;
   Component: React.ComponentType<Record<string, unknown>>;
@@ -22,6 +21,4 @@ export const routeRegistry: RouteConfig[] = [
     Component: () => <div>Profile (Feature Placeholder)</div>,
     protected: true,
   },
-];
-</parameter>
-</function>
+]
