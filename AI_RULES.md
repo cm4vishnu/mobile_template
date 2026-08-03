@@ -17,3 +17,14 @@ Available packages and libraries:
 - You ALREADY have ALL the shadcn/ui components and their dependencies installed. So you don't need to install them again.
 - You have ALL the necessary Radix UI components installed.
 - Use prebuilt components from the shadcn/ui library after importing them. Note that these files shouldn't be edited, so make new components if you need to change them.
+
+Framework Rules
+
+- This is an offline-first mobile application.
+- The primary database is Capacitor SQLite.
+- Never use Supabase unless explicitly requested.
+- Firebase is optional and used only for authentication or cloud synchronization.
+- Gemini is optional.
+- Keep AI, Auth, Database, and Storage in separate services.
+- Reuse existing components.
+- Never replace the project architecture.
