@@ -49,6 +49,7 @@ allowBuilds:
   '@firebase/util': false
   "@ghaiklor/x509": true
   "@go-task/cli": true
+  '@google/genai': true
   "@injectivelabs/sdk-ts": true
   "@instana/autoprofile": true
   "@intlify/vue-i18n-bridge": true
