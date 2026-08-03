@@ -1,2 +1,3 @@
-# Project Name
-# Test2
+# Framework Template
+
+A reusable React + Capacitor mobile application framework.
