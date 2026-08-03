@@ -273,7 +273,7 @@ export class TodayRepository {
       WHERE id = ?
     `;
     
-    const values: any[] = [];
+    const values: Array<string | number | null> = [];
     if (updates.title !== undefined) values.push(updates.title);
     if (updates.completed !== undefined) values.push(updates.completed ? 1 : 0);
     if (updates.orderIndex !== undefined) values.push(updates.orderIndex);
