@@ -1,1 +1,1 @@
-// Placeholder
+export { FirebaseAuthService } from './firebase';
