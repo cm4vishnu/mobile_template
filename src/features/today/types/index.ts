@@ -18,3 +18,22 @@ export const SECTIONS: SectionConfig[] = [
   { key: 'work-block-2', title: 'Work Block 2' },
   { key: 'night', title: 'Night' },
 ];
+
+/**
+ * Represents a daily session for task management.
+ */
+export interface Session {
+  id: number;
+  date: string;
+  slots: TaskSlot[];
+}
+
+/**
+ * Represents a task slot within a session.
+ */
+export interface TaskSlot {
+  id: number;
+  slotType: string;
+  orderIndex: number;
+  tasks: Task[];
+}
