@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { SQLite, SQLiteConnection, SQLiteDatabase } from '@capacitor-community/sqlite';
 import { FrameworkError } from '@/utils/errors';
 
@@ -56,7 +57,7 @@ export class SQLiteService {
    * Closes the database connection.
    */
   public async close(): Promise<void> {
-    if (this.state!== 'connected' ||!this.db) return;
+    if (this.state !== 'connected' || !this.db) return;
 
     try {
       await this.db.close();
@@ -72,7 +73,7 @@ export class SQLiteService {
    * @param sql - The SQL statement to execute.
    * @param params - Parameters for the statement.
    */
-  public async execute(sql: string, params: unknown = []): Promise<any> {
+  public async execute(sql: string, params: readonly unknown[] = []): Promise<unknown> {
     this.ensureConnected();
     try {
       return await this.db!.executeSet(sql, params);
@@ -86,7 +87,7 @@ export class SQLiteService {
    * @param sql - The SQL query.
    * @param params - Parameters for the query.
    */
-  public async query<T>(sql: string, params: unknown = []): Promise<T[]> {
+  public async query<T>(sql: string, params: readonly unknown[] = []): Promise<T[]> {
     this.ensureConnected();
     try {
       const result = await this.db!.query(sql, params);
@@ -101,7 +102,7 @@ export class SQLiteService {
    * @param statements - An array of SQL statements.
    * @param params - An array of parameter arrays.
    */
-  public async executeSet(statements: string[], params: any[] = []): Promise<any> {
+  public async executeSet(statements: string[], params: readonly unknown[] = []): Promise<unknown> {
     this.ensureConnected();
     try {
       return await this.db!.executeSet(statements, params);
@@ -142,7 +143,7 @@ export class SQLiteService {
   }
 
   private ensureConnected(): void {
-    if (this.state!== 'connected' ||!this.db) {
+    if (this.state !== 'connected' || !this.db) {
       throw new FrameworkError('Database is not connected. Call open() first.');
     }
   }
