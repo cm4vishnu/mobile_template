@@ -1,6 +1,6 @@
 allowBuilds:
   "@firebase/util": false # dyad-auto-denied
-  "@google/genai@2.15.0(supports-color": false # dyad-auto-denied
+  
   protobufjs: false # dyad-auto-denied
   # dyad-default-allow-builds begin
   # dyad-default-allow-builds-schema=v1
@@ -375,6 +375,7 @@ allowBuilds:
   zeromq: true
   zlib-sync: true
   zopflipng-bin: true
+  '@google/genai': true
   # dyad-default-allow-builds end
 
 packages:
